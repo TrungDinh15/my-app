@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,13 +22,17 @@ interface FormErrors {
 }
 
 export default function RegisterPage() {
+  const { signUp } = useAuth();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
+  const [authError, setAuthError] = useState("");
   const [success, setSuccess] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function validate(): FormErrors {
     const newErrors: FormErrors = {};
@@ -62,16 +67,25 @@ export default function RegisterPage() {
     return newErrors;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitted(true);
     setSuccess("");
+    setAuthError("");
 
     const newErrors = validate();
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      setSuccess("Registration successful (demo)");
+      setIsLoading(true);
+      const { error } = await signUp(email.trim(), password);
+      setIsLoading(false);
+
+      if (error) {
+        setAuthError(error);
+      } else {
+        setSuccess("Registration successful");
+      }
     }
   }
 
@@ -86,6 +100,7 @@ export default function RegisterPage() {
   ) {
     if (!submitted) return;
     setSuccess("");
+    setAuthError("");
 
     setErrors((prev) => {
       const next = { ...prev };
@@ -269,13 +284,24 @@ export default function RegisterPage() {
               )}
             </div>
 
+            {/* Supabase Auth Error */}
+            {authError && (
+              <p
+                data-testid="error-auth"
+                className="rounded-lg bg-red-50 p-3 text-center text-sm font-semibold text-red-700"
+              >
+                {authError}
+              </p>
+            )}
+
             {/* Submit */}
             <Button
               data-testid="register-submit"
               type="submit"
               className="w-full"
+              disabled={isLoading}
             >
-              Create Account
+              {isLoading ? "Creating account…" : "Create Account"}
             </Button>
 
             {/* Success */}

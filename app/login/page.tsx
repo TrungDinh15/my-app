@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,13 +16,18 @@ import {
 } from "@/components/ui/card";
 
 export default function LoginPage() {
+  const { signIn } = useAuth();
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
+  const [authError, setAuthError] = useState("");
   const [success, setSuccess] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   function validate() {
     const newErrors: { email?: string; password?: string } = {};
@@ -39,16 +46,25 @@ export default function LoginPage() {
     return newErrors;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitted(true);
     setSuccess("");
+    setAuthError("");
 
     const newErrors = validate();
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      setSuccess("Login successful (demo)");
+      setIsLoading(true);
+      const { error } = await signIn(email.trim(), password);
+      setIsLoading(false);
+
+      if (error) {
+        setAuthError(error);
+      } else {
+        router.push("/");
+      }
     }
   }
 
@@ -71,6 +87,7 @@ export default function LoginPage() {
         });
       }
       setSuccess("");
+      setAuthError("");
     }
   }
 
@@ -86,6 +103,7 @@ export default function LoginPage() {
         });
       }
       setSuccess("");
+      setAuthError("");
     }
   }
 
@@ -151,13 +169,24 @@ export default function LoginPage() {
               )}
             </div>
 
+            {/* Supabase Auth Error */}
+            {authError && (
+              <p
+                data-testid="error-auth"
+                className="rounded-lg bg-red-50 p-3 text-center text-sm font-semibold text-red-700"
+              >
+                {authError}
+              </p>
+            )}
+
             {/* Submit */}
             <Button
               data-testid="login-submit"
               type="submit"
               className="w-full"
+              disabled={isLoading}
             >
-              Sign In
+              {isLoading ? "Signing in…" : "Sign In"}
             </Button>
 
             {/* Success */}
