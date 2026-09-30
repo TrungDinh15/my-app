@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 export default function Header() {
   const auth = useContext(AuthContext);
   const user = auth?.user ?? null;
-  const loading = auth?.loading ?? false;
   const signOut = auth?.signOut;
 
   return (
@@ -20,7 +19,7 @@ export default function Header() {
           </h1>
         </Link>
         <nav className="flex items-center gap-2 sm:gap-3">
-          {loading ? null : user ? (
+          {user ? (
             <>
               <span
                 data-testid="user-email"
