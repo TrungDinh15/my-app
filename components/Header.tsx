@@ -1,14 +1,13 @@
 "use client";
 
-import { useContext } from "react";
 import Link from "next/link";
-import { AuthContext } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import { Button } from "@/components/ui/button";
 
 export default function Header() {
-  const auth = useContext(AuthContext);
-  const user = auth?.user ?? null;
-  const signOut = auth?.signOut;
+  const { user, signOut } = useAuth();
+  const { favorites } = useFavorites();
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
@@ -21,6 +20,19 @@ export default function Header() {
         <nav className="flex items-center gap-2 sm:gap-3">
           {user ? (
             <>
+              <Link
+                href="/favorites"
+                data-testid="link-favorites"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                ♥ Favorites{" "}
+                <span
+                  data-testid="favorites-count"
+                  className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground"
+                >
+                  {favorites.length}
+                </span>
+              </Link>
               <span
                 data-testid="user-email"
                 className="hidden text-sm font-medium text-muted-foreground sm:inline"

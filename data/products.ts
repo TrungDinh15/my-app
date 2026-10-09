@@ -1,65 +1,65 @@
 export interface Product {
   id: number;
   name: string;
-  image: string;
-  alt: string;
+  price: number;
   description: string;
-  price: string;
+  category: string;
+  image: string;
 }
 
 export const products: Product[] = [
   {
     id: 1,
     name: "Wireless Headphones Pro",
-    image: "/products/headphones.jpg",
-    alt: "Premium wireless headphones with rose gold accents",
+    price: 149.99,
     description:
       "Premium noise-cancelling headphones with 40-hour battery life, deep bass, and ultra-comfortable ear cushions.",
-    price: "$149.99",
+    category: "Audio",
+    image: "/products/headphones.jpg",
   },
   {
     id: 2,
     name: "Smart Fitness Watch",
-    image: "/products/smartwatch.jpg",
-    alt: "Modern smartwatch with fitness tracking display",
+    price: 249.0,
     description:
       "Track your health and fitness with heart rate monitoring, GPS, sleep tracking, and a stunning AMOLED display.",
-    price: "$249.00",
+    category: "Wearables",
+    image: "/products/smartwatch.jpg",
   },
   {
     id: 3,
     name: "Portable Bluetooth Speaker",
-    image: "/products/speaker.jpg",
-    alt: "Navy blue portable Bluetooth speaker",
+    price: 79.99,
     description:
       "Waterproof speaker with 360° sound, 12-hour playtime, and rugged design perfect for outdoor adventures.",
-    price: "$79.99",
+    category: "Audio",
+    image: "/products/speaker.jpg",
   },
   {
     id: 4,
     name: "Mechanical RGB Keyboard",
-    image: "/products/keyboard.jpg",
-    alt: "Mechanical keyboard with RGB backlighting and white keycaps",
+    price: 129.95,
     description:
       "Compact 75% layout with hot-swappable switches, per-key RGB lighting, and a premium aluminum frame.",
-    price: "$129.95",
+    category: "Accessories",
+    image: "/products/keyboard.jpg",
   },
   {
     id: 5,
     name: "Mirrorless Camera X-T4",
-    image: "/products/camera.jpg",
-    alt: "Mirrorless digital camera with lens attached",
+    price: 1499.0,
     description:
       "26.1 MP sensor, 4K video at 60fps, in-body image stabilization, and classic retro design for creators.",
-    price: "$1,499.00",
+    category: "Photography",
+    image: "/products/camera.jpg",
   },
   {
     id: 6,
     name: "Urban Laptop Backpack",
-    image: "/products/backpack.jpg",
-    alt: "Dark gray laptop backpack with leather accents",
+    price: 89.99,
     description:
-      "Fits up to 16\" laptops with padded compartments, water-resistant canvas, and genuine leather details.",
-    price: "$89.99",
+      'Fits up to 16" laptops with padded compartments, water-resistant canvas, and genuine leather details.',
+    category: "Accessories",
+    image: "/products/backpack.jpg",
   },
 ];
