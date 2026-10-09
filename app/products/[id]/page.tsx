@@ -8,6 +8,8 @@ type Props = {
   params: Promise<{ id: string }>;
 };
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return products.map((p) => ({ id: String(p.id) }));
 }
@@ -16,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const product = products.find((p) => p.id === Number(id));
   if (!product) {
-    return { title: "Not Found | TechStore" };
+    notFound();
   }
   return { title: `${product.name} | TechStore` };
 }
