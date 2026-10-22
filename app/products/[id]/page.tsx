@@ -2,7 +2,11 @@ import { products } from "@/data/products";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Header from "@/components/Header";
 import FavoriteButton from "@/components/FavoriteButton";
+import ProductReviews from "@/components/ProductReviews";
+import { ReviewsProvider } from "@/contexts/ReviewsContext";
+import { getProductReviews } from "@/lib/reviews";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -31,8 +35,11 @@ export default async function ProductDetailPage({ params }: Props) {
     notFound();
   }
 
+  const { reviews } = await getProductReviews(product.id);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
+      <Header />
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         <Link
           href="/"
@@ -86,6 +93,11 @@ export default async function ProductDetailPage({ params }: Props) {
             <FavoriteButton productId={product.id} />
           </div>
         </div>
+
+        {/* Reviews Section wrapped with ReviewsProvider */}
+        <ReviewsProvider productId={product.id} initialReviews={reviews}>
+          <ProductReviews productId={product.id} />
+        </ReviewsProvider>
       </div>
     </div>
   );
