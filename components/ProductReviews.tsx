@@ -4,11 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Star, MessageSquare, Trash2, Edit3, Check, X } from "lucide-react";
+import { Star, MessageSquare, Trash2, Edit3, Check } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useReviews } from "@/contexts/ReviewsContext";
 import { reviewSchema, type ReviewInput } from "@/lib/reviewSchema";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 interface ProductReviewsProps {
   productId: number;
@@ -175,10 +175,12 @@ export default function ProductReviews({ productId }: ProductReviewsProps) {
               <p className="text-muted-foreground mb-4">
                 Have you purchased or used this product? Share your review with others!
               </p>
-              <Link href="/login">
-                <Button data-testid="link-login-to-review">
-                  Log in to review
-                </Button>
+              <Link
+                href="/login"
+                data-testid="link-login-to-review"
+                className={buttonVariants()}
+              >
+                Log in to review
               </Link>
             </div>
           ) : myReview ? (
